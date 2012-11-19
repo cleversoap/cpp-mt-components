@@ -19,10 +19,14 @@ bool MTComponent::isActive()
 void MTComponent::run()
 {
 	_componentActive = true;
-
 	while(_componentActive)
 	{
-		_componentActive = false;
 	}
+}
+
+void MTComponent::kill()
+{
+	_componentActive = false;
+	_thread.join();
 }
 

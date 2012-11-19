@@ -12,7 +12,7 @@ class MTComponent
 		MTComponent();
 		virtual ~MTComponent();
 		bool isActive();
-		
+		void kill();	
 
 	protected:
 		bool _componentActive;
