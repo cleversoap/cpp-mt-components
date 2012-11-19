@@ -15,7 +15,7 @@ class IMTComponent
 	protected:
 		bool _componentActive;
 		thread _thread;
-		
+		void run();	
 };
 
 #endif
