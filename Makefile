@@ -1,5 +1,5 @@
 CXX = clang++
-CFLAGS = -std=c++11 -c -stdlib=libc++
+CFLAGS = -std=c++11 -stdlib=libc++
 
 lib:
-	$(CXX) IMTComponent.cpp $(CFLAGS)
+	$(CXX) MTComponent.cpp -c $(CFLAGS)
