@@ -1,4 +1,3 @@
-#ifndef __MTSIGNAL_H__
 /*
 * Copyright (c) 2012 Cleversoap
 * Permission is hereby granted, free of charge, to any person obtaining a
@@ -20,6 +19,7 @@
 * IN THE SOFTWARE.
 */
 
+#ifndef __MTSIGNAL_H__
 #define __MTSIGNAL_H__
 
 #include <vector>
@@ -45,10 +45,23 @@ class MTSignal
 		}
 
 		// Connect a slot function that returns void and matches the
-		// signal delegate.
+		// signal delegate. Note that a slot can be added more than once
+		// and will therefore be called more than once.
 		void connect(void (*slf)(T...))
 		{
 			_slots.push_back(slf);
+		}
+
+		// Remove a slot function from being called.
+		void remove(void (*slf)(T...))
+		{
+			for(int i = 0; i < _slots.size(); ++i)
+			{
+				if (_slots.at(i) == slf)
+				{
+					_slots.erase(_slots.begin() + i);
+				}
+			}
 		}
 
 	protected:
