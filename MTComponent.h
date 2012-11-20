@@ -4,6 +4,8 @@
 #include <thread>
 #include <functional>
 
+#include "MTSignal.h"
+
 using namespace std;
 
 class MTComponent
