@@ -9,15 +9,20 @@ using namespace std;
 template<typename...T>
 class MTSignal
 {
+	
 	public:
 		MTSignal()
 		{
 		}
 
-		void operator() (...)
+		void operator() (T... args)
 		{
-			std::cout << "HELLO" << std::endl;
+			for(int i = 0; i < slots.size(); ++i)
+			{
+				slots.at(i)(args...);
+			}
 		}	
+
 		vector<void (*) (T...)> slots;
 };
 
