@@ -33,6 +33,7 @@ template<typename...T>
 class MTSignal
 {
 	typedef function<void(T...)> vft;	
+	typedef void (*mft) (T...);
 
 	public:
 		MTSignal(){}
@@ -61,8 +62,9 @@ class MTSignal
 		{
 			for(auto i = _slots.begin(); i != _slots.end(); ++i)
 			{
-				if (slf == static_cast<vft>(*i))
+				if (slf.template target<mft*>() == static_cast<vft>(*i).template target<mft*>())
 				{
+					_slots.erase(i);
 				}
 			}
 		}
