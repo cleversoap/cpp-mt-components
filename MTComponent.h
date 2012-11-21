@@ -2,7 +2,6 @@
 #define __MTCOMPONENT_H__
 
 #include <thread>
-#include <functional>
 
 #include "MTSignal.h"
 
@@ -11,15 +10,34 @@ using namespace std;
 class MTComponent
 {
 	public:
-		MTComponent();
-		virtual ~MTComponent();
-		bool isActive();
-		void kill();	
+		MTComponent()
+		: _active(false)
+		{
+		}
+
+		bool isActive()
+		{
+			return _active;
+		}
+		void kill()
+		{
+			if (_active)
+			{
+				_active = false;
+				_thread.join();
+			}
+		}
 
 	protected:
-		bool _componentActive;
+		bool _active;
 		thread _thread;
-		void run();
+		void run()
+		{
+			_active = true;
+			while (_active)
+			{
+			}
+		}
 };
 
 #endif
