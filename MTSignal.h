@@ -29,7 +29,8 @@ using namespace std;
 template<typename...T>
 class MTSignal
 {
-	
+	typedef function<void(T...)> vft;
+
 	public:
 		MTSignal(){}
 
@@ -47,26 +48,20 @@ class MTSignal
 		// Connect a slot function that returns void and matches the
 		// signal delegate. Note that a slot can be added more than once
 		// and will therefore be called more than once.
-		void connect(void (*slf)(T...))
+		void connect(vft slf)
 		{
 			_slots.push_back(slf);
 		}
 
 		// Remove a slot function from being called.
-		void remove(void (*slf)(T...))
+		void removeAt(int i)
 		{
-			for(int i = 0; i < _slots.size(); ++i)
-			{
-				if (_slots.at(i) == slf)
-				{
-					_slots.erase(_slots.begin() + i);
-				}
-			}
+			_slots.erase(_slots.begin() + i);	
 		}
 
 	protected:
 		// Vector of all slot functions
-		vector<void (*) (T...)> _slots;
+		vector<vft> _slots;
 };
 
 template<>
@@ -88,6 +83,12 @@ class MTSignal<>
 		void connect(vft slf)
 		{
 			_slots.push_back(slf);
+		}
+
+		// Remove a slot function from being called.
+		void removeAt(int i)
+		{
+			_slots.erase(_slots.begin() + i);	
 		}
 
 	protected:
