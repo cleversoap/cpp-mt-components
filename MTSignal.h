@@ -23,8 +23,10 @@
 #define __MTSIGNAL_H__
 
 #include <vector>
+#include <functional>
 
 using namespace std;
+using namespace std::placeholders;
 
 template<typename...T>
 class MTSignal
@@ -37,9 +39,9 @@ class MTSignal
 		// Call the operator as you normally would with parameters
 		// as the type templating has already been done
 		// This will iterate over each slot and call it with the passed params.
-		void operator() (const T&... args)
+		void operator() (T... args)
 		{
-			for(auto i = _slots.begin(); i != _slots.size(); ++i)
+			for(auto i = _slots.begin(); i != _slots.end(); ++i)
 			{
 				(*i)(args...);
 			}
@@ -54,9 +56,16 @@ class MTSignal
 		}
 
 		// Remove a slot function from being called.
-		void removeAt(int i)
+		void remove(vft slf)
 		{
-			_slots.erase(_slots.begin() + i);	
+			for(auto i = _slots.begin(); i != _slots.end(); ++i)
+			{
+				/*
+				if (*i == slf)
+				{
+
+				}*/	
+			}
 		}
 
 	protected:
@@ -85,10 +94,15 @@ class MTSignal<>
 			_slots.push_back(slf);
 		}
 
-		// Remove a slot function from being called.
-		void removeAt(int i)
+		void remove(vft slf)
 		{
-			_slots.erase(_slots.begin() + i);	
+			for(auto i = _slots.begin(); i != _slots.end(); ++i)
+			{
+				if ((*i).target<void()>() == slf.target<void()>())
+				{
+					_slots.erase(i);
+				}
+			}
 		}
 
 	protected:
