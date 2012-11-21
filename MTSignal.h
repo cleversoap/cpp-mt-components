@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <functional>
+#include <iostream>
 
 using namespace std;
 using namespace std::placeholders;
@@ -31,7 +32,7 @@ using namespace std::placeholders;
 template<typename...T>
 class MTSignal
 {
-	typedef function<void(T...)> vft;
+	typedef function<void(T...)> vft;	
 
 	public:
 		MTSignal(){}
@@ -58,13 +59,14 @@ class MTSignal
 		// Remove a slot function from being called.
 		void remove(vft slf)
 		{
+			typedef decltype(slf) tf;
+
 			for(auto i = _slots.begin(); i != _slots.end(); ++i)
 			{
-				/*
-				if (*i == slf)
+				if (slf == static_cast<vft>(*i))
 				{
-
-				}*/	
+					std::cout << "OH SHIT" << endl;
+				}
 			}
 		}
 
@@ -83,7 +85,7 @@ class MTSignal<>
 
 		void operator()()
 		{
-			for(auto i = _slots.begin(); i != _slots.end(); ++i)
+			for(auto i = _slots.begin(); i < _slots.end(); ++i)
 			{
 				(*i)();
 			}
@@ -96,7 +98,7 @@ class MTSignal<>
 
 		void remove(vft slf)
 		{
-			for(auto i = _slots.begin(); i != _slots.end(); ++i)
+			for(auto i = _slots.begin(); i < _slots.end(); ++i)
 			{
 				if ((*i).target<void()>() == slf.target<void()>())
 				{
