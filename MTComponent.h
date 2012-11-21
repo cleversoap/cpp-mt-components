@@ -2,8 +2,7 @@
 #define __MTCOMPONENT_H__
 
 #include <thread>
-
-#include "MTSignal.h"
+#include <iostream>
 
 using namespace std;
 
@@ -20,12 +19,15 @@ class MTComponent
 			return _active;
 		}
 
-		void start()
+		void start(void)
 		{
-			_thread = thread(&MTComponent::run, this);
+			if (!_active)
+			{
+				_thread = thread(&MTComponent::run, this);
+			}
 		}
 
-		void stop()
+		void stop(void)
 		{
 			if (_active)
 			{

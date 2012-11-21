@@ -69,4 +69,30 @@ class MTSignal
 		vector<void (*) (T...)> _slots;
 };
 
+template<>
+class MTSignal<>
+{
+	typedef function<void()> vft; 
+
+	public:
+		MTSignal(){}
+
+		void operator()()
+		{
+			for(int i = 0; i < _slots.size(); ++i)
+			{
+				_slots.at(i)();
+			}
+		}
+
+		void connect(vft slf)
+		{
+			_slots.push_back(slf);
+		}
+
+	protected:
+		vector<vft> _slots;
+
+};
+
 #endif
