@@ -19,7 +19,13 @@ class MTComponent
 		{
 			return _active;
 		}
-		void kill()
+
+		void start()
+		{
+			_thread = thread(&MTComponent::run, this);
+		}
+
+		void stop()
 		{
 			if (_active)
 			{
