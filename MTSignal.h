@@ -39,9 +39,9 @@ class MTSignal
 		// This will iterate over each slot and call it with the passed params.
 		void operator() (const T&... args)
 		{
-			for(int i = 0; i < _slots.size(); ++i)
+			for(auto i = _slots.begin(); i != _slots.size(); ++i)
 			{
-				_slots.at(i)(args...);
+				(*i)(args...);
 			}
 		}
 
@@ -74,9 +74,9 @@ class MTSignal<>
 
 		void operator()()
 		{
-			for(int i = 0; i < _slots.size(); ++i)
+			for(auto i = _slots.begin(); i != _slots.end(); ++i)
 			{
-				_slots.at(i)();
+				(*i)();
 			}
 		}
 
