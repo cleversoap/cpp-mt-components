@@ -42,7 +42,7 @@ class MTSignal
 		// This will iterate over each slot and call it with the passed params.
 		void operator() (T... args)
 		{
-			for(auto i = _slots.begin(); i != _slots.end(); ++i)
+			for(auto i = _slots.begin(); i < _slots.end(); ++i)
 			{
 				(*i)(args...);
 			}
@@ -59,7 +59,7 @@ class MTSignal
 		// Remove a slot function from being called.
 		void remove(vft slf)
 		{
-			for(auto i = _slots.begin(); i != _slots.end(); ++i)
+			for(auto i = _slots.begin(); i < _slots.end(); ++i)
 			{
 				if (slf.template target<mft*>() == static_cast<vft>(*i).template target<mft*>())
 				{
