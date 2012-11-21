@@ -59,13 +59,10 @@ class MTSignal
 		// Remove a slot function from being called.
 		void remove(vft slf)
 		{
-			typedef decltype(slf) tf;
-
 			for(auto i = _slots.begin(); i != _slots.end(); ++i)
 			{
 				if (slf == static_cast<vft>(*i))
 				{
-					std::cout << "OH SHIT" << endl;
 				}
 			}
 		}
