@@ -24,7 +24,6 @@
 
 #include <vector>
 #include <functional>
-#include <iostream>
 
 using namespace std;
 using namespace std::placeholders;
