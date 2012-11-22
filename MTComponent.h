@@ -2,14 +2,15 @@
 #define __MTCOMPONENT_H__
 
 #include <thread>
+#include <string>
 
 using namespace std;
 
 class MTComponent
 {
 	public:
-		MTComponent()
-		: _active(false)
+		MTComponent(const string &name)
+		: _active(false), _name(name)
 		{
 		}
 
@@ -35,9 +36,15 @@ class MTComponent
 			}
 		}
 
+		string getName()
+		{
+			return _name;
+		}
+
 	protected:
 		bool _active;
 		thread _thread;
+		string _name;
 		void run()
 		{
 			_active = true;
