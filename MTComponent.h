@@ -2,7 +2,6 @@
 #define __MTCOMPONENT_H__
 
 #include <thread>
-#include <iostream>
 
 using namespace std;
 
@@ -36,11 +35,6 @@ class MTComponent
 			}
 		}
 
-		void test(int x)
-		{
-			cout << "Testing..." << x << endl;
-		}
-
 	protected:
 		bool _active;
 		thread _thread;
@@ -49,8 +43,6 @@ class MTComponent
 			_active = true;
 			while (_active)
 			{
-				cout << "HELLO" << endl;
-				_active = false;
 			}
 		}
 };
