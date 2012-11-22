@@ -15,6 +15,28 @@ class MTDomain
 	public:
 		MTDomain(){}
 
+		MTDomain(MTComponent* component, ...)
+		{
+			va_list ap;
+			va_start(ap,component);
+			// Iterate over the new components
+			// until nullptr
+			decltype(component) nc;
+			while((nc = va_arg(ap,decltype(component))))
+			{
+				if (nc != nullptr)
+				{
+					addComponent(nc);
+				}
+				else
+				{
+					break;
+				}	
+			}
+			va_end(ap);
+			delete nc;
+		}
+
 		void addComponent(MTComponent* component)
 		{
 			_components.push_back(component);
@@ -32,7 +54,7 @@ class MTDomain
 				}
 			}
 
-			return NULL;
+			return nullptr;
 		}
 
 		void removeComponent(const string &name)
@@ -53,7 +75,7 @@ class MTDomain
 
 		bool hasComponent(const string &name)
 		{
-			return getComponent(name) != NULL;
+			return getComponent(name) != nullptr;
 		}
 
 		MTSignal<> start;

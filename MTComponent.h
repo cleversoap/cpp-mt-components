@@ -50,6 +50,7 @@ class MTComponent
 			_active = true;
 			while (_active)
 			{
+				//cout << getName() << endl;
 			}
 		}
 };
