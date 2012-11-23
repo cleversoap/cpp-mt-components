@@ -18,6 +18,7 @@
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 * IN THE SOFTWARE.
 */
+
 #ifndef __MTCOMPONENT_H__
 #define __MTCOMPONENT_H__
 
@@ -28,17 +29,22 @@ using namespace std;
 
 class MTComponent
 {
+	// Member Variables
+	protected:
+		bool _active;
+		thread _thread;
+		string _name;
+		
+	// Public Functions
 	public:
+		// Constructor
 		MTComponent(const string &name)
 		: _active(false), _name(name)
 		{
 		}
-
-		bool isActive()
-		{
-			return _active;
-		}
-
+		
+		// Slots
+		// Start the component's thread
 		void start(void)
 		{
 			if (!_active)
@@ -47,6 +53,7 @@ class MTComponent
 			}
 		}
 
+		// Stop the component's thread
 		void stop(void)
 		{
 			if (_active)
@@ -56,21 +63,28 @@ class MTComponent
 			}
 		}
 
+		// Property Functions
+		// Whether or not the component's thread is active
+		bool isActive()
+		{
+			return _active;
+		}
+
+		// The component's name
 		string getName()
 		{
 			return _name;
 		}
 
+	// Member Functions
 	protected:
-		bool _active;
-		thread _thread;
-		string _name;
+		// Thread function that will loop as long as the component is active
 		void run()
 		{
 			_active = true;
 			while (_active)
 			{
-				//cout << getName() << endl;
+				
 			}
 		}
 };

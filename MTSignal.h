@@ -28,13 +28,23 @@
 using namespace std;
 using namespace std::placeholders;
 
+
+
+// Variadic type parameters
 template<typename...T>
 class MTSignal
 {
+	// Types
 	typedef function<void(T...)> vft;	
 	typedef void (*mft) (T...);
+	
+	// Member Variables
+	protected:
+		vector<vft> _slots; // Slot functions container
 
+	// Public Functions
 	public:
+		// Constructor
 		MTSignal(){}
 
 		// Call the operator as you normally would with parameters
@@ -68,19 +78,26 @@ class MTSignal
 			}
 		}
 
-	protected:
-		// Vector of all slot functions
-		vector<vft> _slots;
+
 };
 
+// No-parameter void signal template
 template<>
 class MTSignal<>
 {
+	// Types
 	typedef function<void()> vft; 
 
+	// Member Variables
+	protected:
+		vector<vft> _slots; // Slot functions container
+
+	// Public Functions
 	public:
+		// Constructor
 		MTSignal(){}
 
+		// Empty operator as this type of signal will not have any args.
 		void operator()()
 		{
 			for(auto i = _slots.begin(); i < _slots.end(); ++i)
@@ -89,11 +106,13 @@ class MTSignal<>
 			}
 		}
 
+		// Connect a slot to this signal.
 		void connect(vft slf)
 		{
 			_slots.push_back(slf);
 		}
 
+		// Remove a slot from this signal.
 		void remove(vft slf)
 		{
 			for(auto i = _slots.begin(); i < _slots.end(); ++i)
@@ -104,10 +123,5 @@ class MTSignal<>
 				}
 			}
 		}
-
-	protected:
-		vector<vft> _slots;
-
 };
-
 #endif

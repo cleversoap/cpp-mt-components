@@ -32,9 +32,21 @@ using namespace std::placeholders;
 
 class MTDomain
 {
+	// Signals
 	public:
+		MTSignal<> start;
+		MTSignal<> stop;
+
+	// Member Variables
+	protected:
+		vector<MTComponent*> _components;
+
+	// Public Functions
+	public:
+		// Constructor
 		MTDomain(){}
 
+		// Variadic Constructor
 		MTDomain(MTComponent* component, ...)
 		{
 			va_list ap;
@@ -57,6 +69,8 @@ class MTDomain
 			delete nc;
 		}
 
+		// Add a component and bind its slots to the start/stop signals
+		// of the domain.
 		void addComponent(MTComponent* component)
 		{
 			_components.push_back(component);
@@ -64,6 +78,10 @@ class MTDomain
 			stop.connect(bind(&MTComponent::stop,component));
 		}
 
+		// Retrieves a component by matching the supplied string
+		// to the getName() function of each component. This will
+		// only match the first component with the name and will
+		// not work if trying to retrieve multiple components.
 		MTComponent* getComponent(const string &name)
 		{
 			for (auto i = _components.begin(); i < _components.end(); ++i)
@@ -77,11 +95,13 @@ class MTDomain
 			return nullptr;
 		}
 
+		// Remove all components that match the supplied name.
 		void removeComponent(const string &name)
 		{
 			removeComponent(getComponent(name));
 		}
 
+		// Remove all component entries that contain the supplied component
 		void removeComponent(MTComponent* component)
 		{
 			for (auto i = _components.begin(); i < _components.end(); ++i)
@@ -93,16 +113,11 @@ class MTDomain
 			}
 		}
 
+		// Check if any components have the supplied name.
 		bool hasComponent(const string &name)
 		{
 			return getComponent(name) != nullptr;
 		}
-
-		MTSignal<> start;
-		MTSignal<> stop;
-
-	protected:
-		vector<MTComponent*> _components;
 };
 
 #endif
