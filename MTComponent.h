@@ -77,7 +77,7 @@ class MTComponent
 		}
 
 		// Called each loop of the thread
-		void tick()
+		virtual void tick()
 		{
 		}
 
