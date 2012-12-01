@@ -45,7 +45,7 @@ class MTComponent
 		
 		// Slots
 		// Start the component's thread
-		void start(void)
+		virtual void start(void)
 		{
 			if (!_active)
 			{
@@ -54,7 +54,7 @@ class MTComponent
 		}
 
 		// Stop the component's thread
-		void stop(void)
+		virtual void stop(void)
 		{
 			if (_active)
 			{
@@ -65,13 +65,13 @@ class MTComponent
 
 		// Property Functions
 		// Whether or not the component's thread is active
-		bool isActive()
+		virtual bool isActive()
 		{
 			return _active;
 		}
 
 		// The component's name
-		string getName()
+		virtual string getName()
 		{
 			return _name;
 		}
@@ -84,7 +84,7 @@ class MTComponent
 	// Member Functions
 	protected:
 		// Thread function that will loop as long as the component is active
-		void run()
+		virtual void run()
 		{
 			_active = true;
 			while (_active)

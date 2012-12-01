@@ -46,14 +46,36 @@ class MTDomain
 		// Constructor
 		MTDomain(){}
 
+		// Variadic Constructor
+		MTDomain(MTComponent* component, ...)
+		{
+			va_list ap;
+			va_start(ap,component);
+			// Iterate over the new components
+			// until nullptr
+			decltype(component) nc;
+			while((nc = va_arg(ap,decltype(component))))
+			{
+				if (nc != nullptr)
+				{
+					addComponent(nc);
+				}
+				else
+				{
+					break;
+				}	
+			}
+			va_end(ap);
+			delete nc;
+		}
+
 		// Add a component and bind its slots to the start/stop signals
 		// of the domain.
-		template<class T>
-		void addComponent(T* component)
+		void addComponent(MTComponent* component)
 		{
 			_components.push_back(component);
-			start.connect(bind(&T::start,component));
-			stop.connect(bind(&T::stop,component));
+			start.connect(bind(&MTComponent::start,component));
+			stop.connect(bind(&MTComponent::stop,component));
 		}
 
 		// Retrieves a component by matching the supplied string
