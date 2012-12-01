@@ -76,6 +76,11 @@ class MTComponent
 			return _name;
 		}
 
+		// Called each loop of the thread
+		void tick()
+		{
+		}
+
 	// Member Functions
 	protected:
 		// Thread function that will loop as long as the component is active
@@ -84,7 +89,7 @@ class MTComponent
 			_active = true;
 			while (_active)
 			{
-				
+				this->tick();				
 			}
 		}
 };
