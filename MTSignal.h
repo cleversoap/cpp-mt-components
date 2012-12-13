@@ -24,104 +24,53 @@
 
 #include <vector>
 #include <functional>
+#include <thread>
 
-using namespace std;
-using namespace std::placeholders;
-
-
-
-// Variadic type parameters
 template<typename...T>
 class MTSignal
 {
-	// Types
-	typedef function<void(T...)> vft;	
-	typedef void (*mft) (T...);
 	
-	// Member Variables
-	protected:
-		vector<vft> _slots; // Slot functions container
-
-	// Public Functions
 	public:
-		// Constructor
 		MTSignal(){}
-
-		// Call the operator as you normally would with parameters
-		// as the type templating has already been done
-		// This will iterate over each slot and call it with the passed params.
+		~MTSignal()
+		{
+			clear();
+		}
+	
+		typedef std::function<void(T...)> SlotFunc;	
+		typedef void (*SlotFuncDelegate) (T...);
+	
 		void operator() (T... args)
 		{
 			for(auto i = _slots.begin(); i < _slots.end(); ++i)
 			{
 				(*i)(args...);
+				//std::thread(*i, args...).detach();
 			}
 		}
 
-		// Connect a slot function that returns void and matches the
-		// signal delegate. Note that a slot can be added more than once
-		// and will therefore be called more than once.
-		void connect(vft slf)
+		void connect(SlotFunc slotFunc)
 		{
-			_slots.push_back(slf);
+			_slots.push_back(slotFunc);
 		}
 
-		// Remove a slot function from being called.
-		void remove(vft slf)
+		void remove(SlotFunc slotFunc)
 		{
 			for(auto i = _slots.begin(); i < _slots.end(); ++i)
 			{
-				if (slf.template target<mft*>() == static_cast<vft>(*i).template target<mft*>())
+				if (slotFunc.template target<SlotFuncDelegate*>() == static_cast<SlotFunc>(*i).template target<SlotFuncDelegate*>())
 				{
 					_slots.erase(i);
 				}
 			}
 		}
 
+		void clear()
+		{
+			_slots.clear();
+		}
 
-};
-
-// No-parameter void signal template
-template<>
-class MTSignal<>
-{
-	// Types
-	typedef function<void()> vft; 
-
-	// Member Variables
 	protected:
-		vector<vft> _slots; // Slot functions container
-
-	// Public Functions
-	public:
-		// Constructor
-		MTSignal(){}
-
-		// Empty operator as this type of signal will not have any args.
-		void operator()()
-		{
-			for(auto i = _slots.begin(); i < _slots.end(); ++i)
-			{
-				(*i)();
-			}
-		}
-
-		// Connect a slot to this signal.
-		void connect(vft slf)
-		{
-			_slots.push_back(slf);
-		}
-
-		// Remove a slot from this signal.
-		void remove(vft slf)
-		{
-			for(auto i = _slots.begin(); i < _slots.end(); ++i)
-			{
-				if ((*i).target<void()>() == slf.target<void()>())
-				{
-					_slots.erase(i);
-				}
-			}
-		}
+		std::vector<SlotFunc> _slots; // Slot functions container
 };
 #endif
